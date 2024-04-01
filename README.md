@@ -63,3 +63,33 @@ db.people.find( { "components.type": "library" }, { "components.name": 1 ,"compo
 db.people.count()
 
 ## postgres
+
+```bash
+docker run \
+  --rm \
+  --name some-postgres \
+  -p 9998:5432 \
+  -e POSTGRES_PASSWORD=mysecretpassword \
+  -d \
+  postgres:16.2-alpine3.19
+```
+
+sudo apt install postgresql-client-common postgresql-client
+
+psql -p 9998 -h localhost -U postgres
+
+```bash
+select images.name,images.version,images.digest from images INNER JOIN components ON images.id = components.image_id WHERE severity = 'critical';
+```
+
+```bash
+select * from images INNER JOIN components ON images.id = components.image_id WHERE severity = 'critical';
+```
+
+```bash
+select * from images INNER JOIN accounts ON accounts.id = images.account_id INNER JOIN components ON images.id = components.image_id WHERE severity = 'critical';
+```
+
+```bash
+select images.name,images.version,images.digest,components.name,components.version,components.severity from images INNER JOIN accounts ON accounts.id = images.account_id INNER JOIN components ON images.id = components.image_id WHERE severity = 'critical' GROUP BY images.name,images.version,images.digest,components.name,components.version,components.severity;
+```
